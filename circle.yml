@@ -3,7 +3,7 @@ machine:
     - redis
     - docker
   environment:
-    IMPORT_PATH:      "github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME"
+    GOPATH_DEST:      "/home/ubuntu/.go_project/src/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME"
     COVERAGE_PROFILE: "/home/ubuntu/coverage.out"
     GO_LDFLAGS:       "-X main.VERSION=$CIRCLE_TAG -X main.COMMIT_SHA1=$CIRCLE_SHA1 -X main.BUILD_DATE=$(date +%F-%T)"
     MY_GO_VERSION:    "1.7.4"
@@ -17,7 +17,8 @@ dependencies:
     - sudo apt-get update
     - sudo apt-get install glide -y
     - glide --version
-
+    - mkdir -p "/home/ubuntu/.go_project/src/$CIRCLE_PROJECT_USERNAME"
+    - ln -s $CIRCLE_PROJECT_REPONAME $GOPATH_DEST
 test:
   pre:
     - wget https://storage.googleapis.com/golang/go$MY_GO_VERSION.linux-amd64.tar.gz &&  sudo rm -rf /usr/local/go/ &&  sudo tar -C /usr/local -xzf go$MY_GO_VERSION.linux-amd64.tar.gz
@@ -25,7 +26,7 @@ test:
     - go vet ./...
     - go get github.com/mattn/goveralls
     - go get golang.org/x/tools/cmd/cover
-    - pwd
+    - cd $GOPATH_DEST
     - glide install
   override:
     - pwd
