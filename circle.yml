@@ -25,8 +25,10 @@ test:
     - go vet ./...
     - go get github.com/mattn/goveralls
     - go get golang.org/x/tools/cmd/cover
-    - glide install && mv vendor/* /usr/local/go/src/
+    - pwd
+    - glide install
   override:
+    - pwd
     - go test -v -cover -race -coverprofile=$COVERAGE_PROFILE $(glide novendor)
   post:
     - if [ -n "$COVERALLS_TOKEN" ]; then /home/ubuntu/.go_workspace/bin/goveralls -coverprofile=$COVERAGE_PROFILE -service=circle-ci -repotoken=$COVERALLS_TOKEN ;  fi
