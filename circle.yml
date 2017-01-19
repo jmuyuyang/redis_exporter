@@ -13,8 +13,6 @@ dependencies:
     - rm -rf /home/ubuntu/.go_workspace
     - rm -rf /home/ubuntu/.go_project
   override:
-    - mkdir -p $HOME/.go_workspace/src/github.com/$CIRCLE_PROJECT_USERNAME
-    - ln -fs $HOME/$CIRCLE_PROJECT_REPONAME $HOME/.go_workspace/src/github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
     - sudo add-apt-repository ppa:masterminds/glide -y
     - sudo apt-get update
     - sudo apt-get install glide -y
@@ -27,7 +25,7 @@ test:
     - go vet ./...
     - go get github.com/mattn/goveralls
     - go get golang.org/x/tools/cmd/cover
-    - cd $HOME/$CIRCLE_PROJECT_REPONAME && glide install
+    - glide install && mv vendor/* /usr/local/go/src/
   override:
     - go test -v -cover -race -coverprofile=$COVERAGE_PROFILE $(glide novendor)
   post:
