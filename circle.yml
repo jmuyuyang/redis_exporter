@@ -25,7 +25,7 @@ test:
     - go vet ./...
     - go get github.com/mattn/goveralls
     - go get golang.org/x/tools/cmd/cover
-    - glide install
+    - glide install --strip-vcs --strip-vendor --update-vendored --delete
   override:
     - go test -v -cover -race -coverprofile=$COVERAGE_PROFILE $(glide novendor)
   post:
