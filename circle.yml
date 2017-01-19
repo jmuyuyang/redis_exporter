@@ -6,7 +6,7 @@ machine:
     IMPORT_PATH:      "github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME"
     COVERAGE_PROFILE: "/home/ubuntu/coverage.out"
     GO_LDFLAGS:       "-X main.VERSION=$CIRCLE_TAG -X main.COMMIT_SHA1=$CIRCLE_SHA1 -X main.BUILD_DATE=$(date +%F-%T)"
-    MY_GO_VERSION:    "1.7.3"
+    MY_GO_VERSION:    "1.7.4"
 
 dependencies:
   pre:
@@ -27,7 +27,7 @@ test:
     - go vet ./...
     - go get github.com/mattn/goveralls
     - go get golang.org/x/tools/cmd/cover
-    - cd $HOME/.go_workspace/src/github.com/$CIRCLE_PROJECT_USERNAME && glide install
+    - cd $HOME/$CIRCLE_PROJECT_REPONAME && glide install
   override:
     - go test -v -cover -race -coverprofile=$COVERAGE_PROFILE $(glide novendor)
   post:
